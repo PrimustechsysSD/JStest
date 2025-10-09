@@ -7,10 +7,10 @@
     "Which emoji best describes your current mood?"
   ];
 
-  const asked = new Set();
   let count = 0;
+  const asked = new Set();
 
-  function askRandomQuestion() {
+  function askNext() {
     if (count >= 3) {
       window.location.href = "https://hcm-in10-preview.hr.cloud.sap/sf/reportcenter";
       return;
@@ -29,9 +29,8 @@
     }
 
     count++;
-    askRandomQuestion();
+    askNext();
   }
 
-  askRandomQuestion();
+  askNext();
 })();
-
