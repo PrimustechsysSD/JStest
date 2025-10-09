@@ -1,34 +1,21 @@
 (function () {
-  const duration = 10000; // 10 seconds
-  const interval = 200;   // emoji spawn rate
-  const emoji = '😊';
-  const startTime = Date.now();
+  const questions = [
+    "What's your favorite programming language?",
+    "How many cups of coffee have you had today?",
+    "If you could automate one task forever, what would it be?",
+    "What's the most satisfying bug you've ever squashed?",
+    "Which browser do you trust the most for testing?"
+  ];
 
-  const spawnEmoji = () => {
-    const el = document.createElement('div');
-    el.textContent = emoji;
-    el.style.position = 'fixed';
-    el.style.left = `${Math.random() * window.innerWidth}px`;
-    el.style.top = `${Math.random() * window.innerHeight}px`;
-    el.style.fontSize = `${30 + Math.random() * 20}px`;
-    el.style.opacity = '1';
-    el.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
-    el.style.zIndex = '9999';
-    document.body.appendChild(el);
-
-    // Animate and remove
-    setTimeout(() => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(-20px)';
-    }, 50);
-    setTimeout(() => el.remove(), 1050);
-  };
-
-  const timer = setInterval(() => {
-    if (Date.now() - startTime > duration) {
-      clearInterval(timer);
-    } else {
-      spawnEmoji();
+  for (let i = 0; i < 3; i++) {
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const answer = prompt(questions[randomIndex]);
+    if (answer === null) {
+      alert("You cancelled the flow. No redirect will happen.");
+      return;
     }
-  }, interval);
+  }
+
+  window.location.href = "https://hcm-in10-preview.hr.cloud.sap/sf/reportcenter";
 })();
+
