@@ -37,21 +37,17 @@
       transition: transform var(--sf-dur) var(--sf-ease), opacity var(--sf-dur) var(--sf-ease);
       overflow: clip;
       z-index: 2147483647;
-      position: fixed;           /* allow manual positioning for drag */
+      position: fixed;
       inset: auto auto auto auto;
     }
     dialog#sf-quicknav3[open] { transform: translateY(0) scale(1); opacity: 1; }
-    dialog#sf-quicknav3::backdrop {
-      background: var(--sf-backdrop);
-      backdrop-filter: blur(2px);
-    }
+    dialog#sf-quicknav3::backdrop { background: var(--sf-backdrop); backdrop-filter: blur(2px); }
 
     .sfq3-header {
       padding: 12px 14px 8px;
       display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px;
       border-bottom: 1px solid rgba(255,255,255,.06);
-      cursor: move;                          /* drag handle */
-      user-select: none;
+      cursor: move; user-select: none;
     }
     .sfq3-title { margin: 0; font-size: 16px; letter-spacing: .2px; }
     .sfq3-close { appearance: none; border: none; background: transparent; color: var(--sf-muted);
@@ -60,10 +56,7 @@
 
     .sfq3-body {
       padding: 12px 14px 14px;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 12px;
-      min-height: 260px;
+      display: grid; grid-template-columns: 260px 1fr; gap: 12px; min-height: 260px;
     }
 
     .sfq3-list { display: grid; gap: 8px; align-content: start; }
@@ -74,9 +67,8 @@
       border-radius: 12px;
       color: var(--sf-fg);
       padding: 10px 12px;
-      cursor: pointer;
+      cursor: pointer; text-align: left;
       transition: transform 140ms var(--sf-ease), background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-      text-align: left;
     }
     .sfq3-item:hover, .sfq3-item:focus-within {
       background: rgba(255,255,255,.06);
@@ -91,9 +83,7 @@
       border-radius: 12px;
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
       min-height: 220px;
-      padding: 12px;
-      position: relative;
-      overflow: hidden;
+      padding: 12px; position: relative; overflow: hidden;
     }
     .sfq3-detail-inner { opacity: 0; transform: translateY(8px); animation: sfq3Slide .20s var(--sf-ease) forwards; }
     @keyframes sfq3Slide { to { opacity: 1; transform: translateY(0); } }
@@ -110,12 +100,7 @@
       padding: 8px 11px; cursor: pointer;
       transition: transform 140ms var(--sf-ease), background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
     }
-    .sfq3-btn:hover {
-      background: rgba(255,255,255,.08);
-      border-color: rgba(255,255,255,.25);
-      box-shadow: 0 6px 18px rgba(122,92,255,.12);
-      transform: translateY(-1px);
-    }
+    .sfq3-btn:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.25); box-shadow: 0 6px 18px rgba(122,92,255,.12); transform: translateY(-1px); }
     .sfq3-btn.primary {
       background: linear-gradient(180deg, color-mix(in oklab, var(--sf-accent) 80%, white 10%), var(--sf-accent));
       border-color: color-mix(in oklab, var(--sf-accent) 85%, white 10%);
@@ -126,9 +111,8 @@
       width: 100%; padding: 10px 12px;
       border-radius: 9px; border: 1px solid rgba(255,255,255,.15);
       background: rgba(255,255,255,.06); color: var(--sf-fg);
-      outline: none;
+      outline: none; margin-top: 12px;   /* extra spacing below buttons */
       transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
-      margin-top: 8px;              /* extra spacing from buttons below */
     }
     .sfq3-input:focus {
       border-color: color-mix(in oklab, var(--sf-accent) 80%, white 10%);
@@ -136,10 +120,7 @@
       background: rgba(255,255,255,.08);
     }
 
-    @media (max-width: 640px) {
-      .sfq3-body { grid-template-columns: 1fr; }
-      .sfq3-detail { min-height: 160px; }
-    }
+    @media (max-width: 640px) { .sfq3-body { grid-template-columns: 1fr; } .sfq3-detail { min-height: 160px; } }
   `;
   document.head.appendChild(style);
 
@@ -157,7 +138,7 @@
   const title = document.createElement('h2');
   title.className = 'sfq3-title';
   title.id = 'sfq3-title';
-  title.textContent = 'Recruiting quick navigation'; // renamed
+  title.textContent = 'Recruiting quick navigation';
 
   const closeBtn = document.createElement('button');
   closeBtn.type = 'submit';
@@ -191,7 +172,17 @@
       summaryUrl: 'https://hcm55preview.sapsf.eu/xi/ui/rcmjobreqsummary/pages/jobReqSummary.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d',
       detailBase: 'https://hcm55preview.sapsf.eu/acme?fbacme_o=recruiting&_s.crb=9VIS1uCr%2bA1WoGavX8Bfn%2br3PgpsPzHvh5geS971D1Y%3d&recruiting_os=jobreqDetail&recruiting_ns=jobreqDetail&recruiting_mode=796'
     },
-    // ... keep the rest of your links unchanged ...
+    { key: 'offers',    label: 'Candidate Offers', url: 'https://hcm55.sapsf.eu/xi/ui/rcmoffer/pages/MassOfferDetailSummary.xhtml' },
+    { key: 'dashboard', label: 'Dashboard', url: 'https://hcm55preview.sapsf.eu/xi/ui/rcmdashboard/pages/index.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'sources',   label: 'Sources', url: 'https://hcm55preview.sapsf.eu/acme?fbacme_n=recruiting&itrModule=rcm&recruiting_ns=sourcePortlet&bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'prefs',     label: 'Preferences', url: 'https://hcm55preview.sapsf.eu/acme?fbacme_n=recruiting&itrModule=rcm&recruiting_ns=local%20questions&bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'cands',     label: 'Candidates', url: 'https://hcm55preview.sapsf.eu/acme?fbacme_n=recruiting&itrModule=rcm&recruiting_ns=candidate%20search%20standalone&bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'ic',        label: 'Interview Central', url: 'https://hcm55preview.sapsf.eu/sf/recruiting/interviewcentral?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'sched',     label: 'Interview Scheduling', url: 'https://hcm55preview.sapsf.eu/xi/ui/rcminterviewschedule/pages/rcmInterviewScheduling.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'mkt',       label: 'Marketing', url: 'https://hcm55preview.sapsf.eu/xi/ui/emailcampaign/pages/index.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'srcTrack',  label: 'Source Tracker', url: 'https://hcm55preview.sapsf.eu/xi/ui/rcmjobs2web/pages/marketing/rmkMarketing.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'adv',       label: 'Advanced Analytics', url: 'https://hcm55preview.sapsf.eu/xi/ui/rcmjobs2web/pages/marketing/rmkAdvancedAnalytics.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' },
+    { key: 'msg',       label: 'Message Center', url: 'https://hcm55preview.sapsf.eu/xi/ui/recruiting/pages/rcmcorrespondence/rcmmessagecenter.xhtml?bplte_company=avasotechpT2&_s.crb=9VIS1uCr%252bA1WoGavX8Bfn%252br3PgpsPzHvh5geS971D1Y%253d' }
   ];
 
   function detailContentFor(item) {
@@ -209,8 +200,7 @@
       const btnById = document.createElement('button'); btnById.type = 'button'; btnById.className = 'sfq3-btn'; btnById.textContent = 'Open by ID';
 
       const idInput = document.createElement('input');
-      idInput.type = 'text';
-      idInput.inputMode = 'numeric';
+      idInput.type = 'text'; idInput.inputMode = 'numeric';
       idInput.placeholder = 'Requisition ID (e.g., 796)';
       idInput.className = 'sfq3-input';
 
@@ -223,12 +213,10 @@
       };
 
       btnById.addEventListener('click', openById);
-      idInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); openById(); }
-      });
+      idInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); openById(); } });
 
       actions.append(btnSummary, btnById);
-      wrap.append(h, p, actions, idInput); // input placed after actions -> more spacing
+      wrap.append(h, p, actions, idInput);
       setTimeout(() => idInput.focus(), 0);
       return wrap;
     }
@@ -264,7 +252,7 @@
       b.addEventListener('mouseenter', show);
       b.addEventListener('focus', show);
       b.addEventListener('click', () => {
-        if (item.key === 'jobreq') openNew(item.summaryUrl);
+        if (item.key === 'jobreq') openNew(items[0].summaryUrl);
         else if (item.url) openNew(item.url);
       });
       left.appendChild(b);
@@ -272,19 +260,14 @@
   }
 
   // ---------------- Draggable behavior ----------------
-  // Drag via header; store position while dialog is open
   (function makeDraggable() {
     let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
 
-    const getRect = () => dlg.getBoundingClientRect();
-
     const onDown = (e) => {
-      // Only left button or touch
       if (e.type === 'mousedown' && e.button !== 0) return;
       dragging = true;
-      const r = getRect();
-      startLeft = r.left;
-      startTop = r.top;
+      const r = dlg.getBoundingClientRect();
+      startLeft = r.left; startTop = r.top;
       startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
       startY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
       document.addEventListener('mousemove', onMove);
@@ -300,8 +283,7 @@
       const dx = x - startX, dy = y - startY;
       dlg.style.left = Math.max(8, startLeft + dx) + 'px';
       dlg.style.top  = Math.max(8, startTop + dy) + 'px';
-      dlg.style.right = 'auto';
-      dlg.style.bottom = 'auto';
+      dlg.style.right = 'auto'; dlg.style.bottom = 'auto';
     };
     const onUp = () => {
       dragging = false;
@@ -313,12 +295,7 @@
 
     header.addEventListener('mousedown', onDown);
     header.addEventListener('touchstart', onDown, { passive: false });
-
-    // Start near top-left with a pleasant offset
-    dlg.addEventListener('close', () => {
-      dlg.style.left = '';
-      dlg.style.top = '';
-    });
+    dlg.addEventListener('close', () => { dlg.style.left = ''; dlg.style.top = ''; });
   })();
 
   // ---------------- Init ----------------
