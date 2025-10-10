@@ -1,95 +1,72 @@
 (() => {
-  // Prevent duplicate injection
-  if (window.__sfQQ && window.__sfQQ.open) {
-    try { window.__sfQQ.showModal(); } catch (_) {}
+  // Reopen if already injected
+  if (window.__sfHowdy && typeof window.__sfHowdy.showModal === 'function') {
+    try { window.__sfHowdy.showModal(); } catch {}
     return;
   }
 
-  // Styles scoped to this dialog
-  const css = `
-    #sfqq-dialog {
-      max-width: 520px;
-      width: 90%;
-      border: 0;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+  // Styles
+  const style = document.createElement('style');
+  style.textContent = `
+    #sf-howdy {
+      max-width: 420px; width: 90%;
+      border: 0; border-radius: 12px; padding: 1rem 1.25rem;
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
       font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
-    #sfqq-dialog::backdrop { background: rgba(0,0,0,0.4); }
-    #sfqq-title { margin: 0 0 0.5rem; font-size: 1.1rem; }
-    #sfqq-text { margin: 0.25rem 0 0.75rem; }
-    .sfqq-actions { display: flex; gap: .5rem; justify-content: flex-end; }
-    .sfqq-actions button {
-      appearance: none; border: 1px solid #d0d7de; background: #fff;
-      border-radius: 8px; padding: .5rem .8rem; cursor: pointer;
-    }
-    .sfqq-actions button[type="button"] { background: #0b5fff; color: #fff; border-color: #0b5fff; }
-    .sfqq-actions button[type="button"]:hover { filter: brightness(0.95); }
+    #sf-howdy::backdrop { background: rgba(0,0,0,.4); }
+    .sf-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .75rem; }
+    .sf-actions button { border: 1px solid #d0d7de; background: #fff; border-radius: 8px; padding: .5rem .8rem; cursor: pointer; }
+    .sf-primary { background: #0b5fff; color: #fff; border-color: #0b5fff; }
   `;
+  document.head.appendChild(style);
 
-  // Inject style
-  const style = document.createElement('style');
-  style.textContent = css;
-  document.head.appendChild(style); // style-src may need to allow inline <style> in strict CSP
-
-  // Build dialog
+  // Dialog structure
   const dlg = document.createElement('dialog');
-  dlg.id = 'sfqq-dialog';
-  dlg.setAttribute('aria-labelledby', 'sfqq-title');
+  dlg.id = 'sf-howdy';
+  dlg.setAttribute('aria-labelledby', 'sf-howdy-title');
 
   const form = document.createElement('form');
   form.method = 'dialog';
 
-  const title = document.createElement('h2');
-  title.id = 'sfqq-title';
-  title.textContent = 'Quick question';
+  const h2 = document.createElement('h2');
+  h2.id = 'sf-howdy-title';
+  h2.textContent = 'Quick check-in';
 
-  const text = document.createElement('p');
-  text.id = 'sfqq-text';
+  const p = document.createElement('p');
+  p.id = 'sf-howdy-text';
+  p.textContent = 'How are you?';
 
   const actions = document.createElement('div');
-  actions.className = 'sfqq-actions';
+  actions.className = 'sf-actions';
 
-  const another = document.createElement('button');
-  another.type = 'button';
-  another.autofocus = true;
-  another.textContent = 'Another';
+  const ok = document.createElement('button');
+  ok.type = 'button';
+  ok.className = 'sf-primary';
+  ok.autofocus = true;
+  ok.textContent = 'I am fine';
 
-  const close = document.createElement('button');
-  close.type = 'submit';
-  close.textContent = 'Close';
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'submit';
+  closeBtn.textContent = 'Close';
 
-  actions.appendChild(another);
-  actions.appendChild(close);
-  form.appendChild(title);
-  form.appendChild(text);
-  form.appendChild(actions);
-  dlg.appendChild(form);
+  actions.append(ok, closeBtn);
+  form.append(h2, p, actions);
+  dlg.append(form);
   document.body.appendChild(dlg);
 
-  const questions = [
-    'What is one goal for this week?',
-    'Name a tool learned recently.',
-    'What is a small win from today?',
-    'Which task needs the most focus next?',
-    'What is a blocker that can be removed?'
-  ];
-
-  function randomIndex(max) { return Math.floor(Math.random() * max); }
-  function setRandomQuestion() { text.textContent = questions[randomIndex(questions.length)]; }
-
-  another.addEventListener('click', (e) => { e.preventDefault(); setRandomQuestion(); });
-
-  dlg.addEventListener('close', () => {
-    // optional cleanup or reading returnValue
+  ok.addEventListener('click', () => {
+    p.textContent = 'Thank you!';
+    ok.disabled = true;
+    setTimeout(() => {
+      window.location.assign('https://www.easemate.ai/webapp/chat?from=ai-chat');
+    }, 900);
   });
 
-  setRandomQuestion();
-  try { dlg.showModal(); } catch {
-    // Fallback to modeless if showModal not available or already open
-    dlg.show ? dlg.show() : alert(text.textContent);
+  try { dlg.showModal(); }
+  catch {
+    if (typeof dlg.show === 'function') dlg.show(); else alert('How are you?');
   }
 
-  window.__sfQQ = dlg;
+  window.__sfHowdy = dlg;
 })();
