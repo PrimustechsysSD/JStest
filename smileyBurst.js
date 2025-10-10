@@ -1,74 +1,95 @@
-(function () {
-  const questions = [
-    "What's your favorite automation tool?",
-    "How many scripts have you debugged this week?",
-    "If you could fix one SAP SF quirk forever, what would it be?"
-  ];
-
-  let current = 0;
-  const answers = [];
-
-  const overlay = document.createElement('div');
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100vw';
-  overlay.style.height = '100vh';
-  overlay.style.background = 'rgba(0,0,0,0.6)';
-  overlay.style.display = 'flex';
-  overlay.style.alignItems = 'center';
-  overlay.style.justifyContent = 'center';
-  overlay.style.zIndex = '9999';
-  document.body.appendChild(overlay);
-
-  const box = document.createElement('div');
-  box.style.background = '#fff';
-  box.style.padding = '20px';
-  box.style.borderRadius = '8px';
-  box.style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
-  box.style.maxWidth = '400px';
-  box.style.textAlign = 'center';
-  overlay.appendChild(box);
-
-  const questionText = document.createElement('div');
-  questionText.style.marginBottom = '10px';
-  questionText.style.fontSize = '16px';
-  box.appendChild(questionText);
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.style.width = '100%';
-  input.style.padding = '8px';
-  input.style.marginBottom = '10px';
-  input.style.border = '1px solid #ccc';
-  input.style.borderRadius = '4px';
-  box.appendChild(input);
-
-  const button = document.createElement('button');
-  button.textContent = 'Next';
-  button.style.padding = '8px 16px';
-  button.style.border = 'none';
-  button.style.background = '#007bff';
-  button.style.color = '#fff';
-  button.style.borderRadius = '4px';
-  button.style.cursor = 'pointer';
-  box.appendChild(button);
-
-  function showQuestion() {
-    questionText.textContent = questions[current];
-    input.value = '';
+(() => {
+  // Prevent duplicate injection
+  if (window.__sfQQ && window.__sfQQ.open) {
+    try { window.__sfQQ.showModal(); } catch (_) {}
+    return;
   }
 
-  button.onclick = () => {
-    answers.push(input.value);
-    current++;
-    if (current < questions.length) {
-      showQuestion();
-    } else {
-      document.body.removeChild(overlay);
-      window.location.href = "https://hcm-in10-preview.hr.cloud.sap/sf/reportcenter";
+  // Styles scoped to this dialog
+  const css = `
+    #sfqq-dialog {
+      max-width: 520px;
+      width: 90%;
+      border: 0;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
-  };
+    #sfqq-dialog::backdrop { background: rgba(0,0,0,0.4); }
+    #sfqq-title { margin: 0 0 0.5rem; font-size: 1.1rem; }
+    #sfqq-text { margin: 0.25rem 0 0.75rem; }
+    .sfqq-actions { display: flex; gap: .5rem; justify-content: flex-end; }
+    .sfqq-actions button {
+      appearance: none; border: 1px solid #d0d7de; background: #fff;
+      border-radius: 8px; padding: .5rem .8rem; cursor: pointer;
+    }
+    .sfqq-actions button[type="button"] { background: #0b5fff; color: #fff; border-color: #0b5fff; }
+    .sfqq-actions button[type="button"]:hover { filter: brightness(0.95); }
+  `;
 
-  showQuestion();
+  // Inject style
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style); // style-src may need to allow inline <style> in strict CSP
+
+  // Build dialog
+  const dlg = document.createElement('dialog');
+  dlg.id = 'sfqq-dialog';
+  dlg.setAttribute('aria-labelledby', 'sfqq-title');
+
+  const form = document.createElement('form');
+  form.method = 'dialog';
+
+  const title = document.createElement('h2');
+  title.id = 'sfqq-title';
+  title.textContent = 'Quick question';
+
+  const text = document.createElement('p');
+  text.id = 'sfqq-text';
+
+  const actions = document.createElement('div');
+  actions.className = 'sfqq-actions';
+
+  const another = document.createElement('button');
+  another.type = 'button';
+  another.autofocus = true;
+  another.textContent = 'Another';
+
+  const close = document.createElement('button');
+  close.type = 'submit';
+  close.textContent = 'Close';
+
+  actions.appendChild(another);
+  actions.appendChild(close);
+  form.appendChild(title);
+  form.appendChild(text);
+  form.appendChild(actions);
+  dlg.appendChild(form);
+  document.body.appendChild(dlg);
+
+  const questions = [
+    'What is one goal for this week?',
+    'Name a tool learned recently.',
+    'What is a small win from today?',
+    'Which task needs the most focus next?',
+    'What is a blocker that can be removed?'
+  ];
+
+  function randomIndex(max) { return Math.floor(Math.random() * max); }
+  function setRandomQuestion() { text.textContent = questions[randomIndex(questions.length)]; }
+
+  another.addEventListener('click', (e) => { e.preventDefault(); setRandomQuestion(); });
+
+  dlg.addEventListener('close', () => {
+    // optional cleanup or reading returnValue
+  });
+
+  setRandomQuestion();
+  try { dlg.showModal(); } catch {
+    // Fallback to modeless if showModal not available or already open
+    dlg.show ? dlg.show() : alert(text.textContent);
+  }
+
+  window.__sfQQ = dlg;
 })();
